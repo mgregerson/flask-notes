@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <h1 class="display-4">Register</h1>
-  <p class="lead">Register for our site.</p>
-  {% for msg in get_flashed_messages() %}
-  <p>{{ msg }}</p>
-  {% endfor %}
+  <h1 class="display-4">Log In</h1>
+  <p class="lead">Welcome! Please log in.</p>
 
   <form method="POST">
 
@@ -23,7 +20,7 @@
       </p>
     {% endfor %}
 
-    <button type="submit">Register</button>
+    <button type="submit">Log In</button>
 
   </form>
 

@@ -21,3 +21,5 @@ theRock = User.register(username='HUGEGUY', password='password2', email='itsabou
 db.session.add(matt)
 db.session.add(vaughn)
 db.session.add(theRock)
+
+db.session.commit()
