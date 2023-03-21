@@ -5,7 +5,7 @@ from wtforms.validators import InputRequired, Email
 
 class RegisterForm(FlaskForm):
     """Form for registering a user."""
-
+# TODO: Add validators for to check user class constraints 
     username = StringField('Input Username',
                            validators=[InputRequired(message='Please add a username!')])
 

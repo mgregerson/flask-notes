@@ -29,7 +29,7 @@ def show_homepage():
 def register_user():
     """GET: Shows a form that allows a user to register as a new user.
        POST: Processes the registration of a new user and sends it to the database. Redirect to
-      '/secret' """
+      '/users/username' """
 
     form = RegisterForm()
 
@@ -38,7 +38,7 @@ def register_user():
         username = form.username.data
         is_unique = check_for_unique_username(username)
         if not is_unique:
-            flash(f'{username} is not unique!')
+            form.username.errors = [f'{username} is not unique!']
             return render_template('register.html', form=form)
         password = form.password.data
         email = form.email.data
@@ -47,16 +47,16 @@ def register_user():
 
         user = User.register(username=username, password=password,
                              email=email, first_name=first_name, last_name=last_name)
+        # TODO: Add try/catch (is the user unique or not?)
         db.session.add(user)
         db.session.commit()
 
         session['username'] = user.username
 
-        return redirect('/secret')
+        return redirect(f'/users/{username}')
 
     else:
         return render_template('register.html', form=form)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def handle_login():
@@ -69,17 +69,16 @@ def handle_login():
 
         username = form.username.data
         password = form.password.data
+# TODO: Change variable name to user
+        authenticate_user = User.authenticate(username, password)
 
-        user = User.query.filter_by(username=username).one_or_none()
-
-        session['username'] = user.username
-
-        if user.password == password:
+        if authenticate_user:
+            session['username'] = username
             return redirect(f'/users/{username}')
         else:
-            return render_template('login.html', form=form)
-    else:
-        return render_template('login.html', form=form)
+            form.username.errors = ["Bad name/password"]
+    
+    return render_template('login.html', form=form)
     
 
 @app.get('/users/<username>')
@@ -115,8 +114,8 @@ def handle_logout():
     form = CSRFProtectForm()
 
     if form.validate_on_submit():
-
+        # TODO: Remove None from line below
         session.pop("username", None)
         print(session, 'this is the session')
-
+    # Add flash message notifying user they have logged out.
     return redirect("/")
