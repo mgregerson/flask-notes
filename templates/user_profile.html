@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %} {% if 'username' in session %} {%
+endif %}
+
+<ul>
+  {% for detail in user_details %}
+  <li>{{ detail }}</li>
+  {% endfor %}
+</ul>
+
+<form action="/logout" method="POST">
+  {{form.hidden_tag()}}
+  <button type="submit" class="btn btn-primary">Logout</button>
+</form>
+
+{% endblock %}

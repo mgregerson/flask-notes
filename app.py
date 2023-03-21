@@ -23,9 +23,7 @@ toolbar = DebugToolbarExtension(app)
 def show_homepage():
     """Redirects user to the register page. """
 
-
     return redirect('/register')
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
@@ -77,25 +75,41 @@ def handle_login():
         session['username'] = user.username
 
         if user.password == password:
-            return redirect('/secret')
+            return redirect(f'/users/{username}')
         else:
             return render_template('login.html', form=form)
     else:
         return render_template('login.html', form=form)
+    
 
-@app.get('/secret')
-def show_secret():
-    """Show secret page on authorization"""
-    print('!!!!!!!!!!!!!', session['username'])
-    if session['username'] not in session:
-        print('the if statement happened!!!!!!!', session)
-        redirect('/')
+@app.get('/users/<username>')
+def display_user_profile(username):
+    """Displays users profile and includes logout button. Redirects user to their page if 
+    attempting to access another users page, redirects a user that is not logged in."""
 
-    return render_template('secret.html')
+    form = CSRFProtectForm()
+
+    this_user = session.get('username')
+
+    if this_user == None:
+        return redirect('/')
+    elif this_user != username:
+        return redirect (f'/users/{this_user}')
+
+    user = User.query.get_or_404(username)
+    
+    unique_username = user.username
+    email = user.email
+    first_name = user.first_name
+    last_name = user.last_name
+
+    user_details = [unique_username, email, first_name, last_name]
+
+    return render_template('user_profile.html', user_details=user_details, form=form)
 
 
 @app.post("/logout")
-def logout():
+def handle_logout():
     """Logs user out and redirects to homepage."""
 
     form = CSRFProtectForm()
@@ -103,5 +117,6 @@ def logout():
     if form.validate_on_submit():
 
         session.pop("username", None)
+        print(session, 'this is the session')
 
     return redirect("/")
