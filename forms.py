@@ -5,7 +5,7 @@ from wtforms.validators import InputRequired, Email
 
 class RegisterForm(FlaskForm):
     """Form for registering a user."""
-# TODO: Add validators for to check user class constraints 
+# TODO: Add validators for to check user class constraints
     username = StringField('Input Username',
                            validators=[InputRequired(message='Please add a username!')])
 
@@ -33,3 +33,30 @@ class LoginForm(FlaskForm):
 
 class CSRFProtectForm(FlaskForm):
     """Form just for CSRF Protection"""
+
+
+class AddNote(FlaskForm):
+    """Form for adding a note"""
+
+    title = StringField(
+        'Input title for note',
+        validators=[InputRequired(
+        message='Please add a title for your note!')])
+
+    content = StringField(
+        'Content for Note',
+        validators=[InputRequired(
+        message='Please add content for your note!')])
+
+class EditNote(FlaskForm):
+    """Form for editing a note"""
+
+    title = StringField(
+        'Input title for note',
+        validators=[InputRequired(
+        message='Please add a title for your note!')])
+
+    content = StringField(
+        'Content for Note',
+        validators=[InputRequired(
+        message='Please add content for your note!')])

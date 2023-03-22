@@ -2,14 +2,42 @@
 endif %}
 
 <ul>
-  {% for detail in user_details %}
-  <li>{{ detail }}</li>
+
+  <li>{{ user.username }}</li>
+  <li>{{ user.email }}</li>
+  <li>{{ user.first_name }}</li>
+  <li>{{ user.last_name }}</li>
+
+</ul>
+
+<ul>
+  {% for note in notes %}
+  <li>{{ note.title }}</li>
+  <p>{{ note.content }}</p>
+  <form action='/notes/{{ note.id }}/update' method="GET">
+    {{form.hidden_tag()}}
+    <button type="submit" class="btn btn-primary">Edit Note</button>
+  </form>
+  <form action="/notes/{{ note.id }}/delete" method="POST">
+    {{form.hidden_tag()}}
+    <button type="submit" class="btn btn-primary">Delete Note</button>
+  </form>
   {% endfor %}
 </ul>
+
 
 <form action="/logout" method="POST">
   {{form.hidden_tag()}}
   <button type="submit" class="btn btn-primary">Logout</button>
 </form>
+<form action="/users/{{ user.username }}/notes/add" method="GET">
+  {{form.hidden_tag()}}
+  <button type="submit" class="btn btn-primary">Add a note</button>
+</form>
+<form action="/users/{{ user.username }}/delete" method="POST">
+  {{form.hidden_tag()}}
+  <button type="submit" class="btn btn-primary">DELETE USER!</button>
+</form>
+
 
 {% endblock %}
